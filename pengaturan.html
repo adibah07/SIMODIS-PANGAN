@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan - SIMODIS-Pangan Terpadu</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <div id="sidebar-placeholder"></div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header Bar -->
+            <div id="header-placeholder"></div>
+
+            <!-- Content Body -->
+            <div class="content-body">
+                <!-- Page Title Block -->
+                <div class="page-title-block">
+                    <div>
+                        <h2 class="page-title">Pengaturan Sistem</h2>
+                        <div class="page-breadcrumbs">
+                            <span>SIMODIS-Pangan</span>
+                            <i class="fas fa-chevron-right breadcrumb-separator"></i>
+                            <span style="color: var(--primary-light); font-weight: 500;">Pengaturan Profil & Aplikasi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Split Grid -->
+                <div class="profile-settings-container">
+                    
+                    <!-- Left: Profile Preview & Reset Database -->
+                    <div>
+                        <div class="profile-card-static">
+                            <div class="profile-large-avatar" id="settings-avatar">AD</div>
+                            <h3 id="settings-profile-name" style="font-weight: 700; font-size: 1.1rem; color: var(--text-main); margin-bottom: 2px;">Adibah Sholihah</h3>
+                            <p style="color: var(--primary-light); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">Super Admin</p>
+                            <p id="settings-profile-email" style="font-size: 0.8rem; color: var(--text-muted);">admin@simodis.id</p>
+                        </div>
+
+                        <!-- Danger Zone: Reset Database -->
+                        <div class="danger-zone">
+                            <h4 class="danger-zone-title">Danger Zone (Zona Bahaya)</h4>
+                            <p class="danger-zone-desc">Menyetel ulang basis data akan menghapus seluruh data CRUD dan mengembalikannya ke dummy data awal.</p>
+                            <button type="button" class="btn btn-danger btn-block" style="padding: 10px;" onclick="resetDatabase()">
+                                <i class="fas fa-undo-alt"></i> Setel Ulang Data (Reset)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Form Settings Tabs -->
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <!-- Tab 1: Profile Settings -->
+                        <div class="card-panel">
+                            <div class="panel-header">
+                                <h3 class="panel-title"><i class="fas fa-user-edit" style="color: var(--primary-light); margin-right: 6px;"></i> Ubah Profil Pengguna</h3>
+                            </div>
+                            <div class="panel-body">
+                                <form id="form-profile-settings" onsubmit="saveProfileSettings(event)">
+                                    <div class="form-group">
+                                        <label for="profile-name-input" class="form-label">Nama Lengkap</label>
+                                        <input type="text" id="profile-name-input" class="form-control" style="padding-left: 14px;" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="profile-email-input" class="form-label">Email Login</label>
+                                        <input type="email" id="profile-email-input" class="form-control" style="padding-left: 14px;" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="profile-password-input" class="form-label">Password Baru</label>
+                                        <input type="password" id="profile-password-input" class="form-control" style="padding-left: 14px;" placeholder="Isi untuk mengubah password...">
+                                    </div>
+
+                                    <div style="display: flex; justify-content: flex-end;">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save"></i> Simpan Profil
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Tab 2: Application / Organization Settings -->
+                        <div class="card-panel">
+                            <div class="panel-header">
+                                <h3 class="panel-title"><i class="fas fa-cogs" style="color: var(--primary-light); margin-right: 6px;"></i> Pengaturan Instansi & Aplikasi</h3>
+                            </div>
+                            <div class="panel-body">
+                                <form id="form-app-settings" onsubmit="saveAppSettings(event)">
+                                    <div class="form-group">
+                                        <label for="app-name-input" class="form-label">Nama Aplikasi</label>
+                                        <input type="text" id="app-name-input" class="form-control" style="padding-left: 14px;" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="app-org-input" class="form-label">Nama Instansi / Dinas</label>
+                                        <input type="text" id="app-org-input" class="form-control" style="padding-left: 14px;" required>
+                                    </div>
+
+                                    <div style="display: flex; justify-content: flex-end;">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save"></i> Simpan Pengaturan
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Core App Logic -->
+    <script src="assets/js/app.js"></script>
+    <!-- Pengaturan controller -->
+    <script src="assets/js/pengaturan.js"></script>
+</body>
+</html>

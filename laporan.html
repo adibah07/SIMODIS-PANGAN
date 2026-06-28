@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan - SIMODIS-Pangan Terpadu</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* Print Stylesheet integration */
+        @media print {
+            body {
+                background-color: #ffffff;
+                color: #000000;
+                font-size: 11pt;
+            }
+            .sidebar, .main-header, .page-title-block, .report-filter-panel, .table-footer, .no-print {
+                display: none !important;
+            }
+            .main-content {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .content-body {
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+            }
+            .card-panel {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+            }
+            .table-modern {
+                border: 1px solid #000000 !important;
+            }
+            .table-modern th, .table-modern td {
+                padding: 8px 10px !important;
+                border-bottom: 1px solid #000000 !important;
+                color: #000000 !important;
+            }
+            .print-header {
+                display: block !important;
+            }
+            .print-signature-block {
+                display: flex !important;
+            }
+        }
+
+        /* Default hidden elements on screen */
+        .print-header {
+            display: none;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 3px double var(--primary-dark);
+            padding-bottom: 1rem;
+        }
+
+        .print-logo-box {
+            font-size: 2.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+        }
+
+        .print-signature-block {
+            display: none;
+            justify-content: flex-end;
+            margin-top: 3rem;
+            padding-right: 2rem;
+        }
+        
+        .signature-box {
+            text-align: center;
+            font-size: 0.9rem;
+            width: 250px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <div id="sidebar-placeholder"></div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header Bar -->
+            <div id="header-placeholder"></div>
+
+            <!-- Content Body -->
+            <div class="content-body">
+                <!-- Page Title Block -->
+                <div class="page-title-block no-print">
+                    <div>
+                        <h2 class="page-title">Laporan Penyaluran</h2>
+                        <div class="page-breadcrumbs">
+                            <span>SIMODIS-Pangan</span>
+                            <i class="fas fa-chevron-right breadcrumb-separator"></i>
+                            <span style="color: var(--primary-light); font-weight: 500;">Cetak & Unduh Laporan</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="window.print()">
+                        <i class="fas fa-print"></i>
+                        <span>Cetak Laporan</span>
+                    </button>
+                </div>
+
+                <!-- Report Filter Panel -->
+                <div class="report-filter-panel no-print">
+                    <h3 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-main);">
+                        <i class="fas fa-filter" style="color: var(--primary-light); margin-right: 6px;"></i> Filter Laporan
+                    </h3>
+                    <div class="report-filter-grid">
+                        <!-- Date Start -->
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="filter-start-date" class="form-label">Tanggal Mulai</label>
+                            <input type="date" id="filter-start-date" class="form-control" style="padding: 8px 12px;">
+                        </div>
+
+                        <!-- Date End -->
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="filter-end-date" class="form-label">Tanggal Selesai</label>
+                            <input type="date" id="filter-end-date" class="form-control" style="padding: 8px 12px;">
+                        </div>
+
+                        <!-- Gudang Asal -->
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="filter-gudang" class="form-label">Gudang Asal</label>
+                            <select id="filter-gudang" class="filter-select" style="width: 100%; padding: 8px 12px;">
+                                <option value="">Semua Gudang</option>
+                                <!-- Populated via JS -->
+                            </select>
+                        </div>
+
+                        <!-- Jenis Pangan -->
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="filter-pangan" class="form-label">Komoditas</label>
+                            <select id="filter-pangan" class="filter-select" style="width: 100%; padding: 8px 12px;">
+                                <option value="">Semua Pangan</option>
+                                <option value="Beras">Beras</option>
+                                <option value="Gula">Gula</option>
+                                <option value="Minyak Goreng">Minyak Goreng</option>
+                                <option value="Tepung">Tepung</option>
+                            </select>
+                        </div>
+
+                        <!-- Button Trigger -->
+                        <div>
+                            <button class="btn btn-secondary btn-block" style="padding: 9px;" onclick="applyFilters()">
+                                <i class="fas fa-search-plus"></i> Saring Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Printable Report Sheet container -->
+                <div class="card-panel">
+                    
+                    <!-- Official Government Header during Printing -->
+                    <div class="print-header">
+                        <div class="print-logo-box">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <h2 style="font-size: 1.4rem; font-weight: 700; color: #0d5c3a; text-transform: uppercase;">
+                            Pemerintah Kabupaten / Dinas Ketahanan Pangan
+                        </h2>
+                        <h3 style="font-size: 1.1rem; font-weight: 600; color: #334155; margin-bottom: 4px;">
+                            Laporan Hasil Pemantauan Distribusi Pangan Wilayah Terpencil
+                        </h3>
+                        <p id="print-duration-label" style="font-size: 0.82rem; color: #64748b;">
+                            Periode: Seluruh Riwayat Distribusi
+                        </p>
+                    </div>
+
+                    <!-- Mini Stats in Report (Screen and Print) -->
+                    <div class="panel-header" style="background-color: #fafafa; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 10px;">
+                        <h3 class="panel-title" id="report-title-label">Ringkasan Riwayat Logistik</h3>
+                        
+                        <div style="display: flex; gap: 1.5rem; font-size: 0.8rem; font-weight: 600;">
+                            <div>Total Pengiriman: <span id="report-stat-count" style="color: var(--primary-light); font-size: 0.85rem;">0</span></div>
+                            <div>Volume Beras/Gula/Tepung: <span id="report-stat-volume-ton" style="color: var(--primary-light); font-size: 0.85rem;">0</span> Ton</div>
+                            <div>Volume Minyak: <span id="report-stat-volume-liter" style="color: var(--primary-light); font-size: 0.85rem;">0</span> Liter</div>
+                        </div>
+                    </div>
+
+                    <!-- Table of records -->
+                    <div class="panel-body" style="padding: 0;">
+                        <div class="table-responsive">
+                            <table class="table-modern">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px;">No</th>
+                                        <th>Tanggal</th>
+                                        <th>Gudang Asal</th>
+                                        <th>Titik Distribusi Tujuan</th>
+                                        <th>Wilayah</th>
+                                        <th>Jenis Pangan</th>
+                                        <th>Jumlah (Kg/Liter)</th>
+                                        <th>Status Pengiriman</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="report-table-body">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Official Signature sign-off for Government -->
+                    <div class="print-signature-block">
+                        <div class="signature-box">
+                            <p id="signature-date">Depok, 26 Juni 2026</p>
+                            <p style="font-weight: 600; margin-top: 4px; margin-bottom: 4rem;">Kepala Dinas Ketahanan Pangan,</p>
+                            <p style="text-decoration: underline; font-weight: 700;">Adibah Sholihah, M.T.</p>
+                            <p style="font-size: 0.75rem; color: #64748b;">NIP. 19930412 201802 2 001</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Core App Logic -->
+    <script src="assets/js/app.js"></script>
+    <!-- Laporan controller -->
+    <script src="assets/js/laporan.js"></script>
+</body>
+</html>

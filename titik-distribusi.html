@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titik Distribusi - SIMODIS-Pangan Terpadu</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <div id="sidebar-placeholder"></div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header Bar -->
+            <div id="header-placeholder"></div>
+
+            <!-- Content Body -->
+            <div class="content-body">
+                <!-- Page Title Block -->
+                <div class="page-title-block">
+                    <div>
+                        <h2 class="page-title">Titik Distribusi</h2>
+                        <div class="page-breadcrumbs">
+                            <span>SIMODIS-Pangan</span>
+                            <i class="fas fa-chevron-right breadcrumb-separator"></i>
+                            <span style="color: var(--primary-light); font-weight: 500;">Kelola Titik Penyaluran</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="openAddModal()">
+                        <i class="fas fa-plus"></i>
+                        <span>Tambah Titik</span>
+                    </button>
+                </div>
+
+                <!-- Table Filter & Search bar -->
+                <div class="table-filter-bar">
+                    <div class="filter-left">
+                        <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-muted);">Tampilkan:</span>
+                        <select class="filter-select" id="page-size-select" onchange="changePageSize()">
+                            <option value="5">5 Data</option>
+                            <option value="10" selected>10 Data</option>
+                            <option value="20">20 Data</option>
+                        </select>
+                    </div>
+                    <div style="position: relative; max-width: 280px; width: 100%;">
+                        <i class="fas fa-search" style="position: absolute; left: 12px; top: 12px; color: var(--text-muted); font-size: 0.85rem;"></i>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="local-search-input" 
+                            placeholder="Cari titik distribusi..." 
+                            style="padding-left: 36px; padding-top: 8px; padding-bottom: 8px;"
+                            onkeyup="handleSearch()"
+                        >
+                    </div>
+                </div>
+
+                <!-- Table Modern CRUD -->
+                <div class="table-responsive">
+                    <table class="table-modern">
+                        <thead>
+                            <tr>
+                                <th style="width: 60px;">No</th>
+                                <th>Nama Titik</th>
+                                <th>Wilayah</th>
+                                <th>Gudang Asal Logistik</th>
+                                <th>Alamat Penyaluran</th>
+                                <th style="width: 120px; text-align: center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="titik-table-body">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Footer -->
+                <div class="table-footer">
+                    <div class="pagination-info" id="pagination-info-text">
+                        Menampilkan 0-0 dari 0 data
+                    </div>
+                    <div class="pagination-controls" id="pagination-buttons">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL ADD / EDIT FORM -->
+    <div class="modal-overlay" id="titik-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title-text">Tambah Titik Distribusi</h3>
+                <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="titik-form" onsubmit="saveData(event)">
+                <input type="hidden" id="titik-id">
+                <div class="modal-body">
+                    <!-- Nama Titik -->
+                    <div class="form-group" style="margin-bottom: 0.8rem;">
+                        <label for="input-nama" class="form-label">Nama Titik Penyaluran</label>
+                        <div class="input-icon-wrapper">
+                            <i class="fas fa-map-pin" style="left: 12px;"></i>
+                            <input type="text" id="input-nama" class="form-control" style="padding-left: 34px;" placeholder="Contoh: Kel. Abadijaya" required>
+                        </div>
+                    </div>
+
+                    <!-- Wilayah (Dropdown) -->
+                    <div class="form-group" style="margin-bottom: 0.8rem;">
+                        <label for="select-wilayah" class="form-label">Wilayah</label>
+                        <select id="select-wilayah" class="filter-select" style="width: 100%; padding: 10px;" required>
+                            <option value="">-- Pilih Wilayah --</option>
+                            <!-- Populated via JS -->
+                        </select>
+                    </div>
+
+                    <!-- Gudang Asal (Dropdown) -->
+                    <div class="form-group" style="margin-bottom: 0.8rem;">
+                        <label for="select-gudang" class="form-label">Gudang Asal Logistik</label>
+                        <select id="select-gudang" class="filter-select" style="width: 100%; padding: 10px;" required>
+                            <option value="">-- Pilih Gudang Penyuplai --</option>
+                            <!-- Populated via JS -->
+                        </select>
+                    </div>
+
+                    <!-- Alamat / Lokasi -->
+                    <div class="form-group" style="margin-bottom: 0.8rem;">
+                        <label for="input-lokasi" class="form-label">Alamat Lengkap</label>
+                        <div class="input-icon-wrapper">
+                            <i class="fas fa-home" style="left: 12px;"></i>
+                            <input type="text" id="input-lokasi" class="form-control" style="padding-left: 34px;" placeholder="Contoh: Kantor Kelurahan Abadijaya Rt 02/05" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Core App Logic -->
+    <script src="assets/js/app.js"></script>
+    <!-- Titik Distribusi controller -->
+    <script src="assets/js/titik-distribusi.js"></script>
+</body>
+</html>

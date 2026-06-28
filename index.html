@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SIMODIS-Pangan Terpadu</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Poppins Font -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <div class="login-wrapper">
+        <!-- Left Side: Splash Screen / Branding Info -->
+        <div class="login-left">
+            <div class="brand-header">
+                <div class="brand-icon-wrapper">
+                    <i class="fas fa-shipping-fast" style="font-size: 1.5rem; color: var(--primary-accent);"></i>
+                </div>
+                <div>
+                    <h2 class="brand-name">SIMODIS-PANGAN</h2>
+                    <p class="brand-subtitle">Sistem Monitoring Distribusi Pangan</p>
+                </div>
+            </div>
+
+            <div class="login-splash-content">
+                <div class="splash-logo">
+                    <i class="fas fa-seedling" style="font-size: 4rem; color: var(--primary-accent);"></i>
+                </div>
+                <h1 class="splash-title">SIMODIS-Pangan Terpadu</h1>
+                <p class="splash-desc">
+                    Sistem Monitoring Distribusi Pangan Terpadu Berbasis Website Untuk Wilayah Terpencil. Memudahkan Dinas Ketahanan Pangan dalam pemantauan stok dan logistik pangan.
+                </p>
+                
+                <div class="splash-illustration">
+                    <i class="fas fa-truck-moving"></i>
+                    <span>Distribusi Pangan Tepat Sasaran</span>
+                </div>
+            </div>
+
+            <div class="login-left-footer">
+                <span>&copy; 2026 SIMODIS-Pangan. Dinas Ketahanan Pangan.</span>
+                <span>v1.0.0</span>
+            </div>
+        </div>
+
+        <!-- Right Side: Login Form -->
+        <div class="login-right">
+            <div class="login-form-container">
+                <div class="login-title-section">
+                    <h2 class="login-form-title">Selamat Datang!</h2>
+                    <p class="login-form-subtitle">Silakan login menggunakan akun administrator Anda.</p>
+                </div>
+
+                <form id="login-form" onsubmit="handleLogin(event)">
+                    <!-- Email / Username -->
+                    <div class="form-group">
+                        <label for="email" class="form-label">Username / Email</label>
+                        <div class="input-icon-wrapper">
+                            <i class="far fa-envelope"></i>
+                            <input 
+                                type="text" 
+                                id="email" 
+                                class="form-control" 
+                                placeholder="Masukkan email (admin@simodis.id)" 
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-icon-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                class="form-control" 
+                                placeholder="Masukkan password (admin)" 
+                                required
+                            >
+                            <button 
+                                type="button" 
+                                class="password-toggle" 
+                                id="toggle-password-visibility" 
+                                onclick="togglePassword()"
+                            >
+                                <i class="far fa-eye" id="eye-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="login-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="remember-me">
+                            <span class="checkmark">Ingat Saya</span>
+                        </label>
+                        <a href="#" style="color: var(--primary-light); font-weight: 500;" onclick="showForgotMessage()">Lupa Password?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <span>Masuk ke Sistem</span>
+                        <i class="fas fa-sign-in-alt"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core App Logic (includes DB init) -->
+    <script src="assets/js/app.js"></script>
+    <script>
+        // Check if already logged in -> handled by app.js. CheckAuth redirects if logged in.
+        
+        // Show/hide password implementation
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.className = 'far fa-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.className = 'far fa-eye';
+            }
+        }
+
+        // Forgot password simulation
+        function showForgotMessage() {
+            Toast.show('Info Sistem', 'Gunakan kredensial bawaan: email: admin@simodis.id & password: admin', 'info', 5000);
+        }
+
+        // Login Submit Handling
+        function handleLogin(event) {
+            event.preventDefault();
+            const emailInput = document.getElementById('email').value.trim();
+            const passwordInput = document.getElementById('password').value;
+
+            // Fetch users from LocalStorage
+            const users = DB.get(DB_KEY_USERS);
+            
+            // Search match user
+            const foundUser = users.find(u => u.email === emailInput && u.password === passwordInput);
+
+            if (foundUser) {
+                // Successful Auth
+                DB.setCurrentUser({
+                    id: foundUser.id,
+                    nama: foundUser.nama,
+                    email: foundUser.email
+                });
+                
+                Toast.show('Login Sukses', 'Mempersiapkan dasbor Anda...', 'success');
+                
+                // Redirect with delay to let Toast show
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 1000);
+            } else {
+                // Authentication Failed
+                Toast.show('Autentikasi Gagal', 'Email atau password yang Anda masukkan salah.', 'error');
+            }
+        }
+    </script>
+</body>
+</html>

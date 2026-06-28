@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SIMODIS-Pangan Terpadu</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <div id="sidebar-placeholder"></div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header Bar -->
+            <div id="header-placeholder"></div>
+
+            <!-- Content Body -->
+            <div class="content-body">
+                <!-- Page Title Block -->
+                <div class="page-title-block">
+                    <div>
+                        <h2 class="page-title">Dashboard</h2>
+                        <div class="page-breadcrumbs">
+                            <span>SIMODIS-Pangan</span>
+                            <i class="fas fa-chevron-right breadcrumb-separator"></i>
+                            <span style="color: var(--primary-light); font-weight: 500;">Dashboard Monitoring</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4 Stats Cards Row -->
+                <div class="stats-grid">
+                    <!-- Total Wilayah Card -->
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <span class="stat-label">Total Wilayah</span>
+                            <span class="stat-value" id="stats-wilayah">0</span>
+                            <span class="stat-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>100% Terintegrasi</span>
+                            </span>
+                        </div>
+                        <div class="stat-icon stat-wilayah">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                    </div>
+
+                    <!-- Total Gudang Card -->
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <span class="stat-label">Total Gudang</span>
+                            <span class="stat-value" id="stats-gudang">0</span>
+                            <span class="stat-trend up">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Aktif Beroperasi</span>
+                            </span>
+                        </div>
+                        <div class="stat-icon stat-gudang">
+                            <i class="fas fa-warehouse"></i>
+                        </div>
+                    </div>
+
+                    <!-- Total Titik Distribusi Card -->
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <span class="stat-label">Titik Distribusi</span>
+                            <span class="stat-value" id="stats-titik">0</span>
+                            <span class="stat-trend up">
+                                <i class="fas fa-shipping-fast"></i>
+                                <span>Wilayah Terpencil</span>
+                            </span>
+                        </div>
+                        <div class="stat-icon stat-titik">
+                            <i class="fas fa-map-pin"></i>
+                        </div>
+                    </div>
+
+                    <!-- Total Distribusi Card -->
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <span class="stat-label">Total Distribusi</span>
+                            <span class="stat-value" id="stats-distribusi">0</span>
+                            <span class="stat-trend up">
+                                <i class="fas fa-clock"></i>
+                                <span>Bulan Juni 2026</span>
+                            </span>
+                        </div>
+                        <div class="stat-icon stat-distribusi">
+                            <i class="fas fa-truck-loading"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section Grid -->
+                <div class="charts-grid">
+                    <!-- Bar Chart: Distribusi per Wilayah -->
+                    <div class="card-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">Distribusi Pangan per Wilayah</h3>
+                            <i class="fas fa-ellipsis-v text-muted" style="cursor: pointer;"></i>
+                        </div>
+                        <div class="panel-body">
+                            <div class="chart-container h-300">
+                                <canvas id="chart-wilayah"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Line Chart: Distribusi per Bulan -->
+                    <div class="card-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">Distribusi Pangan per Bulan (2026)</h3>
+                            <i class="fas fa-ellipsis-v text-muted" style="cursor: pointer;"></i>
+                        </div>
+                        <div class="panel-body">
+                            <div class="chart-container h-300">
+                                <canvas id="chart-bulanan"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Split Bottom Grid -->
+                <div class="dashboard-bottom-grid">
+                    <!-- Left: Table of Warehouse Food Stocks -->
+                    <div class="card-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">Ringkasan Stok Pangan di Gudang</h3>
+                            <a href="gudang.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;">
+                                Detail Gudang
+                            </a>
+                        </div>
+                        <div class="panel-body" style="padding: 0;">
+                            <div class="table-responsive">
+                                <table class="table-modern">
+                                    <thead>
+                                        <tr>
+                                            <th>Gudang</th>
+                                            <th>Beras (Ton)</th>
+                                            <th>Gula (Ton)</th>
+                                            <th>Minyak (Liter)</th>
+                                            <th>Tepung (Ton)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="stock-table-body">
+                                        <!-- Will be loaded dynamically from localStorage -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Widgets: Status Distribusi & Notifikasi Alert Widget -->
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <!-- Status Distribusi Card Panel -->
+                        <div class="card-panel">
+                            <div class="panel-header">
+                                <h3 class="panel-title">Status Distribusi</h3>
+                            </div>
+                            <div class="panel-body status-distribusi-box">
+                                <div class="status-item-card terkirim">
+                                    <div class="status-left">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span class="status-text">Terkirim</span>
+                                    </div>
+                                    <span class="status-count" id="count-terkirim">0</span>
+                                </div>
+                                <div class="status-item-card perjalanan">
+                                    <div class="status-left">
+                                        <i class="fas fa-truck"></i>
+                                        <span class="status-text">Dalam Perjalanan</span>
+                                    </div>
+                                    <span class="status-count" id="count-perjalanan">0</span>
+                                </div>
+                                <div class="status-item-card terlambat">
+                                    <div class="status-left">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        <span class="status-text">Terlambat</span>
+                                    </div>
+                                    <span class="status-count" id="count-terlambat">0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar Alerts Notif Widget -->
+                        <div class="card-panel">
+                            <div class="panel-header">
+                                <h3 class="panel-title">Notifikasi Penting</h3>
+                            </div>
+                            <div class="panel-body notif-widget-list" id="alerts-widget-list">
+                                <!-- Loaded dynamically from localStorage alert values -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Core App Logic -->
+    <script src="assets/js/app.js"></script>
+    <!-- Dashboard Module Controller -->
+    <script src="assets/js/dashboard.js"></script>
+</body>
+</html>
